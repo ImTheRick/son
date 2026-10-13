@@ -1,0 +1,9 @@
+[{
+  "modid": "upgrader",
+  "name": "Upgrader",
+  "description": "Gambling-style item upgrader: risk an item for a shot at a better one.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "authorList": ["EXEcheINZ"],
+  "credits": "Original mod by EXEcheINZ; backported to 1.12.2 with the author's permission."
+}]
