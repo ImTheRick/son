@@ -189,14 +189,18 @@ public class GuiUpgrader extends GuiContainer {
 				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		Tessellator t = Tessellator.getInstance();
 		BufferBuilder bb = t.getBuffer();
-		bb.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_COLOR);
+				bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 		int steps = Math.max(1, (int) Math.ceil((a1 - a0) / 3.0f));
-		for (int i = 0; i <= steps; i++) {
-			double ang = Math.toRadians(a0 + (a1 - a0) * i / steps);
-			float sx = (float) Math.sin(ang), sy = (float) -Math.cos(ang);
-			bb.pos(cx + sx * r0, cy + sy * r0, 0).color(r, g, b, a).endVertex();
-			bb.pos(cx + sx * r1, cy + sy * r1, 0).color(r, g, b, a).endVertex();
-		}
+		for (int i = 0; i < steps; i++) {
+			double p = Math.toRadians(a0 + (a1 - a0) * i / steps);
+			double q = Math.toRadians(a0 + (a1 - a0) * (i + 1) / steps);
+			float px = (float) Math.sin(p), py = (float) -Math.cos(p);
+			float qx = (float) Math.sin(q), qy = (float) -Math.cos(q);
+			bb.pos(cx + px * r0, cy + py * r0, 0).color(r, g, b, a).endVertex();
+			bb.pos(cx + qx * r0, cy + qy * r0, 0).color(r, g, b, a).endVertex();
+			bb.pos(cx + qx * r1, cy + qy * r1, 0).color(r, g, b, a).endVertex();
+			bb.pos(cx + px * r1, cy + py * r1, 0).color(r, g, b, a).endVertex();
+				}
 		t.draw();
 		GlStateManager.disableBlend();
 		GlStateManager.enableTexture2D();
