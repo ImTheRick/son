@@ -10,19 +10,22 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 8
-      - name: Probe Forge mirrors
+          java-version: |
+            8
+            21
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.10.2
+      - run: gradle build --no-daemon --stacktrace
+      - name: Inspect jars
+        if: always()
         run: |
-          for base in https://maven.minecraftforge.net https://files.minecraftforge.net/maven https://maven.cleanroommc.com https://nexus.gtnewhorizons.com/repository/public https://repo.spongepowered.org/repository/maven-public; do
-            for v in 2859 2860; do
-              for c in userdev userdev3 universal; do
-                u=$base/net/minecraftforge/forge/1.12.2-14.23.5.$v/forge-1.12.2-14.23.5.$v-$c.jar
-                echo "$(curl -s -o /dev/null -w '%{http_code}' -L -I "$u") $u"
-              done
-            done
+          ls -l build/libs || true
+          for j in build/libs/*.jar; do
+            echo "$j obfuscated-name hits: $(unzip -p "$j" net/execheinz/upgrader/UpgraderContainer.class | strings | grep -c func_)"
           done
-      - run: bash gradlew build --no-daemon
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: upgrader-forge-1.12.2
           path: build/libs/*.jar
