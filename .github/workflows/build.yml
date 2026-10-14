@@ -11,6 +11,16 @@ jobs:
         with:
           distribution: temurin
           java-version: 8
+      - name: Probe Forge mirrors
+        run: |
+          for base in https://maven.minecraftforge.net https://files.minecraftforge.net/maven https://maven.cleanroommc.com https://nexus.gtnewhorizons.com/repository/public https://repo.spongepowered.org/repository/maven-public; do
+            for v in 2859 2860; do
+              for c in userdev userdev3 universal; do
+                u=$base/net/minecraftforge/forge/1.12.2-14.23.5.$v/forge-1.12.2-14.23.5.$v-$c.jar
+                echo "$(curl -s -o /dev/null -w '%{http_code}' -L -I "$u") $u"
+              done
+            done
+          done
       - run: bash gradlew build --no-daemon
       - uses: actions/upload-artifact@v4
         with:
