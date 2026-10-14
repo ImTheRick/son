@@ -29,7 +29,7 @@ public class UpgraderMod {
 
 	public static final SimpleNetworkWrapper NET = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 	public static final CreativeTabs TAB = new CreativeTabs("upgrader.main") {
-		@Override public ItemStack getTabIconItem() { return new ItemStack(item); }
+		@Override public ItemStack createIcon() { return new ItemStack(item); }
 	};
 
 	public static final Item item = new UpgraderItem();
