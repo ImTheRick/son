@@ -16,6 +16,16 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.10.2
+      - name: Pick latest RetroFuturaGradle
+        run: |
+          base=https://nexus.gtnewhorizons.com/repository/public/com/gtnewhorizons/retrofuturagradle
+          for u in "$base/com.gtnewhorizons.retrofuturagradle.gradle.plugin/maven-metadata.xml" "$base/maven-metadata.xml"; do
+            echo "== $u"; curl -sS -L "$u" | head -40
+          done
+          v=$(curl -sS -L "$base/maven-metadata.xml" | grep -o '<version>[0-9][^<]*</version>' | sed 's/<[^>]*>//g' | grep -v -- '-' | sort -V | tail -1)
+          echo "Latest RFG: $v"
+          if [ -n "$v" ]; then sed -i "s/retrofuturagradle' version '[^']*'/retrofuturagradle' version '$v'/" build.gradle; fi
+          grep retrofuturagradle build.gradle
       - run: gradle build --no-daemon --stacktrace
       - name: Inspect jars
         if: always()
