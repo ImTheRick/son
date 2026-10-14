@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class UpgraderItem extends Item {
 	public UpgraderItem() {
-		setUnlocalizedName("upgrader.upgrader");
+		setTranslationKey("upgrader.upgrader");
 		setRegistryName(UpgraderMod.MODID, "upgrader");
 		setMaxStackSize(1);
 		setCreativeTab(UpgraderMod.TAB);
